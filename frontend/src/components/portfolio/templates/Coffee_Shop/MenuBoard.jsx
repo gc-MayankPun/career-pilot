@@ -116,15 +116,17 @@ export default function MenuBoard({ data }) {
     brewTimeoutsRef.current = [];
   };
 
-  // Add Item to Order
+  // Add Item to Order (functional updater to avoid stale closure)
   const addToOrder = (item) => {
-    if (orderItems.some(o => o.id === item.id)) return;
-    setOrderItems([...orderItems, item]);
+    setOrderItems((prev) => {
+      if (prev.some((o) => o.id === item.id)) return prev;
+      return [...prev, item];
+    });
   };
 
-  // Remove Item from Order
+  // Remove Item from Order (functional updater to avoid stale closure)
   const removeFromOrder = (id) => {
-    setOrderItems(orderItems.filter(o => o.id !== id));
+    setOrderItems((prev) => prev.filter((o) => o.id !== id));
   };
 
   // Calculate Order Stats
